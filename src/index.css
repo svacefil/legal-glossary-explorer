@@ -1,0 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap");
+
+:root {
+  color: #0f1b2d;
+  background-color: #f5f7f9;
+  font-family: "Source Sans 3", "Helvetica Neue", sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  --panel: #ffffff;
+  --panel-muted: #f0f3f7;
+  --border: #d8e1ec;
+  --accent: #0f9d58;
+  --accent-strong: #0a7b44;
+  --ink: #0f1b2d;
+  --muted: #5a6b81;
+  --shadow: 0 20px 40px rgba(15, 27, 45, 0.12);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 10% 20%, rgba(15, 157, 88, 0.06), transparent 25%),
+    radial-gradient(circle at 90% 10%, rgba(255, 152, 0, 0.08), transparent 25%),
+    linear-gradient(180deg, #f5f7f9 0%, #eef2f7 100%);
+  color: var(--ink);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-strong);
+  text-decoration: underline;
+}
