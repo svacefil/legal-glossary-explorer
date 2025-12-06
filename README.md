@@ -20,7 +20,7 @@ Useful scripts:
 - `npm run test` – vitest suite for the query builder
 - `npm run lint` – ESLint
 
-The app targets the DBpedia SPARQL endpoint and requires network access to load live data.
+The app targets the DBpedia SPARQL endpoint and requires network access to load live data. During local dev it uses a Vite proxy (`/api/sparql` → `https://dbpedia.org/sparql`) to sidestep CORS; for production you’ll need an equivalent proxy on your host.
 
 ## Key files
 - `src/config/searchConfig.ts` – endpoint URL, facet definitions, SPARQL templates, page size.

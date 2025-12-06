@@ -1,6 +1,7 @@
 import type { ConstraintConfig, FacetConfig } from "../types/sparql";
 
-export const ENDPOINT_URL = "https://dbpedia.org/sparql";
+// Routed through the dev proxy (see vite.config.ts) to avoid CORS issues.
+export const ENDPOINT_URL = "/api/sparql";
 export const PAGE_SIZE = 10;
 
 export const FACETS: FacetConfig[] = [
