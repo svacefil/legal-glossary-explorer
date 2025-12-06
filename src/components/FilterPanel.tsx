@@ -27,11 +27,11 @@ export function FilterPanel({
     <aside className="filters">
       <div className="filters__header">
         <div>
-          <p className="eyebrow">Filtry</p>
-          <h2 className="filters__title">Zúžit hledání</h2>
+          <p className="eyebrow">Filters</p>
+          <h2 className="filters__title">Narrow the search</h2>
         </div>
         <button className="ghost-button" onClick={onReset}>
-          Vymazat
+          Clear
         </button>
       </div>
       <div className="filters__grid">

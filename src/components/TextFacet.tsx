@@ -13,7 +13,7 @@ export function TextFacet({ facet, value, onChange }: Props) {
       <input
         className="control__input"
         type="search"
-        placeholder="Zadejte text"
+        placeholder="Search text"
         value={value}
         onChange={(event) => onChange(event.target.value)}
       />

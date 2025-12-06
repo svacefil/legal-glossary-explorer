@@ -1,41 +1,40 @@
 import type { ConstraintConfig, FacetConfig } from "../types/sparql";
 
-export const ENDPOINT_URL = "https://xn--slovnk-7va.gov.cz/sparql";
+export const ENDPOINT_URL = "https://dbpedia.org/sparql";
 export const PAGE_SIZE = 10;
 
 export const FACETS: FacetConfig[] = [
   {
-    id: "pojem",
+    id: "name",
     kind: "text",
-    predicate: "http://www.w3.org/2004/02/skos/core#prefLabel",
-    name: "Pojem",
+    predicate: "http://www.w3.org/2000/01/rdf-schema#label",
+    name: "Name",
   },
   {
-    id: "glosar",
+    id: "paradigm",
     kind: "select",
-    predicate: "http://www.w3.org/2004/02/skos/core#inScheme",
-    name: "Glosář",
+    predicate: "http://dbpedia.org/ontology/paradigm",
+    name: "Paradigm",
   },
   {
-    id: "typ",
+    id: "developer",
     kind: "select",
-    predicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-    name: "Typ",
+    predicate: "http://dbpedia.org/ontology/developer",
+    name: "Developer",
   },
 ];
 
 export const CONSTRAINTS: ConstraintConfig[] = [
   {
-    id: "concept",
+    id: "programmingLanguage",
     predicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-    object: "http://www.w3.org/2004/02/skos/core#Concept",
+    object: "http://dbpedia.org/ontology/ProgrammingLanguage",
   },
 ];
 
 export const RESULT_QUERY_TEMPLATE = `PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-PREFIX zs: <https://slovník.gov.cz/základní/pojem/>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT DISTINCT * WHERE
 {
@@ -44,60 +43,42 @@ SELECT DISTINCT * WHERE
     }
 
     FILTER(BOUND(?id))
-    ?id a skos:Concept .
+    ?id a dbo:ProgrammingLanguage .
     OPTIONAL
     {
-        ?id skos:prefLabel ?nazev .
-        FILTER(lang(?nazev)="cs")
+        ?id rdfs:label ?label .
+        FILTER(lang(?label)="en")
     }
     OPTIONAL {
-        ?id skos:definition ?definice .
-        FILTER(lang(?definice)="cs")
+        ?id dbo:abstract ?abstract .
+        FILTER(lang(?abstract)="en")
     }
     OPTIONAL {
-        ?id rdfs:subClassOf ?nadtyp__id .
+        ?id dbo:paradigm ?paradigm__id .
         OPTIONAL {
-            ?nadtyp__id skos:prefLabel ?nadtyp__nazev .
-            FILTER(lang(?nadtyp__nazev) = "cs")
+            ?paradigm__id rdfs:label ?paradigm__label .
+            FILTER(lang(?paradigm__label) = "en")
         }
-        FILTER(?nadtyp__id not in (skos:Concept,owl:Class,owl:NamedIndividual,owl:ObjectProperty,owl:DataProperty,owl:AnnotationProperty))
-        FILTER(isIri(?nadtyp__id))
     }
     OPTIONAL {
-        ?id a ?typ__id .
+        ?id dbo:developer ?developer__id .
         OPTIONAL
         {
-            ?typ__id skos:prefLabel ?typ__nazev .
-            FILTER(lang(?typ__nazev) = "cs")
+            ?developer__id rdfs:label ?developer__label .
+            FILTER(lang(?developer__label) = "en")
         }
-        FILTER(?typ__id not in (skos:Concept,owl:Class,owl:NamedIndividual,owl:ObjectProperty,owl:DataProperty,owl:AnnotationProperty))
-        FILTER(isIri(?nadtyp__id))
-        }
-        OPTIONAL {
-            ?typvlastnosti__id rdfs:subClassOf ?r2 .
-            ?r2 (owl:allValuesFrom/(owl:unionOf/rdf:rest*/rdf:first)?) ?id .
-            ?r2 owl:onProperty zs:je-vlastností .
-            OPTIONAL
-            {
-                ?typvlastnosti__id skos:prefLabel ?typvlastnosti__nazev . FILTER(lang(?typvlastnosti__nazev) = "cs")
-            }
-        }
+    }
+    OPTIONAL
+    {
+        ?id dbo:influencedBy ?influence__id.
         OPTIONAL
         {
-            ?typvztahu__id rdfs:subClassOf ?r1.
-            ?r1 owl:onProperty zs:má-vztažený-prvek-1 .
-            ?r1 (owl:allValuesFrom/(owl:unionOf/rdf:rest*/rdf:first)?) ?id .
-            OPTIONAL
-            {
-                ?typvztahu__id skos:prefLabel ?typvztahu__nazev . FILTER(lang(?typvztahu__nazev) = "cs")
-            }
+            ?influence__id rdfs:label ?influence__label . FILTER(lang(?influence__label) = "en")
         }
-        OPTIONAL
-        {
-            ?id skos:inScheme ?glosar__id .
-            OPTIONAL { ?glosar__id rdfs:label ?glosar__nazev .
-            FILTER(lang(?glosar__nazev)="cs")}
-        }
+    }
+    OPTIONAL {
+        ?id dbo:released ?released .
+    }
 }`;
 
 export const SELECT_QUERY_TEMPLATE = `SELECT DISTINCT ?cnt ?facet_text ?result WHERE{
@@ -118,11 +99,11 @@ export const SELECT_QUERY_TEMPLATE = `SELECT DISTINCT ?cnt ?facet_text ?result W
       BIND(COALESCE(?result, <http://ldf.fi/NONEXISTENT_URI>) AS ?labelValue)
 OPTIONAL
 { 
-   ?result <http://www.w3.org/2004/02/skos/core#prefLabel>
+   ?result <http://www.w3.org/2000/01/rdf-schema#label>
 ?enPref . FILTER(langMatches(lang(?enPref), "en")) . }
 OPTIONAL{ ?result <http://www.w3.org/2000/01/rdf-schema#label>
 ?enLabel . FILTER(langMatches(lang(?enLabel), "en")) . }
-OPTIONAL { ?result <http://www.w3.org/2004/02/skos/core#prefLabel>
+OPTIONAL { ?result <http://www.w3.org/2000/01/rdf-schema#label>
 ?prefLabel . FILTER(langMatches(lang(?prefLabel), "")) . }
 OPTIONAL { ?result <http://www.w3.org/2000/01/rdf-schema#label>
 ?label . FILTER(langMatches(lang(?label), "")) . }

@@ -26,12 +26,11 @@ function App() {
     <div className="page">
       <header className="hero">
         <div className="hero__content">
-          <p className="eyebrow">Srovnání právních pojmů</p>
-          <h1>Jedno rozhraní, víc glosářů</h1>
+          <p className="eyebrow">DBpedia Programming Languages</p>
+          <h1>Explore languages by paradigm and creators</h1>
           <p className="lede">
-            Vyhledejte pojem napříč glosáři a porovnejte, jak se liší definice,
-            typy i vztahy. Dotazy běží přímo proti SPARQL endpointu
-            slovník.gov.cz.
+            Query the DBpedia SPARQL endpoint to browse programming languages,
+            filter by paradigm or developer, and scan abstracts and influences.
           </p>
         </div>
       </header>
@@ -51,10 +50,10 @@ function App() {
         <section className="results">
           <div className="results__header">
             <div>
-              <p className="eyebrow">Výsledky</p>
-              <h2>Glosářové záznamy</h2>
+              <p className="eyebrow">Results</p>
+              <h2>Programming languages</h2>
             </div>
-            {loading && <span className="pill">Načítám…</span>}
+            {loading && <span className="pill">Loading…</span>}
             {error && <span className="pill pill--error">{error}</span>}
           </div>
 

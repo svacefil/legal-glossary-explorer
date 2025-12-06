@@ -17,17 +17,17 @@ export function Pagination({ page, totalPages, onChange }: Props) {
         disabled={page === 0}
         onClick={handlePrev}
       >
-        Předchozí
+        Previous
       </button>
       <span className="pagination__label">
-        Strana {page + 1} / {totalPages}
+        Page {page + 1} / {totalPages}
       </span>
       <button
         className="ghost-button"
         disabled={page + 1 >= totalPages}
         onClick={handleNext}
       >
-        Další
+        Next
       </button>
     </div>
   );

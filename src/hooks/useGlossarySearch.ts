@@ -90,7 +90,7 @@ export function useGlossarySearch(): UseGlossarySearchResult {
       } catch (err) {
         if (!active) return;
         console.error(err);
-        setError("Nepodařilo se načíst data ze SPARQL endpointu.");
+        setError("Failed to load data from the SPARQL endpoint.");
       } finally {
         if (active) {
           setLoading(false);

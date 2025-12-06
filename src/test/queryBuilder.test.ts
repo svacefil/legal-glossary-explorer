@@ -14,29 +14,29 @@ describe("QueryBuilder", () => {
   it("builds a result query with text and select filters", () => {
     const filters = {
       select: {
-        glosar: "http://example.com/glossary",
-        typ: null,
+        paradigm: "http://dbpedia.org/resource/Functional_programming",
+        developer: null,
       },
       text: {
-        pojem: "Budova",
+        name: "Haskell",
       },
     };
 
     const query = decodeQuery(builder.resultUrl(filters, 0));
 
     expect(query).toContain(
-      '<http://www.w3.org/2004/02/skos/core#inScheme> <http://example.com/glossary>',
+      '<http://dbpedia.org/ontology/paradigm> <http://dbpedia.org/resource/Functional_programming>',
     );
     expect(query.toLowerCase()).toContain(
-      `filter(contains(lcase(?pojem1), "budova"))`,
+      `filter(contains(lcase(?name1), "haskell"))`,
     );
     expect(query).toContain(`LIMIT ${PAGE_SIZE}`);
   });
 
   it("builds facet queries for each select facet", () => {
-    const filters = { select: { glosar: null, typ: null }, text: { pojem: "" } };
+    const filters = { select: { paradigm: null, developer: null }, text: { name: "" } };
     const facetUrls = builder.facetUrls(filters);
-    expect(Object.keys(facetUrls).length).toBeGreaterThan(0);
+    expect(Object.keys(facetUrls)).toEqual(["paradigm", "developer"]);
     Object.values(facetUrls).forEach((url) => {
       const query = decodeQuery(url);
       expect(query).toContain("SELECT DISTINCT ?cnt ?result ?facet_text");
